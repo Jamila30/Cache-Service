@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CachingLibrary": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
