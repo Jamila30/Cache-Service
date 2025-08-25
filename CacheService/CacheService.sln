@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheServiceApi", "CacheService\CacheServiceApi.csproj", "{DB8E0BA0-B8FB-435A-8C0F-B6CA139892AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheServiceAPI", "CacheServiceAPI\CacheServiceAPI.csproj", "{DB8E0BA0-B8FB-435A-8C0F-B6CA139892AE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FD94EA91-1209-449E-90D5-35F436F8D5BA} = {FD94EA91-1209-449E-90D5-35F436F8D5BA}
 	EndProjectSection
