@@ -1,3 +1,4 @@
+using CacheServiceAPI;
 using CachingLibrary;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCachingLibrary();
-builder.Services.AddOptions(builder.Configuration);
+builder.Services.AddCustomOptions(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

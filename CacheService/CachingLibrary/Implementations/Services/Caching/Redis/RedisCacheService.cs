@@ -14,11 +14,11 @@ namespace CachingLibrary.Implementations.Services.Caching.Redis
     {
         private IDatabase _redisCache { get; set; }
         private CachingOptions _cachingOptions { get; set; }
-        public ConnectionMultiplexer _redisConfiguration { get; }
+        public ConnectionMultiplexer _redisConfiguration { get; set; }
         public RedisCacheService(IOptions<CachingOptions> cachingOptions)
         {
            _cachingOptions = cachingOptions.Value;
-            _redisConfiguration = ConnectionMultiplexer.Connect(_cachingOptions!.Redis!.ConnectionString);
+            _redisConfiguration = ConnectionMultiplexer.Connect(_cachingOptions!.RedisCache!.ConnectionString!);
             _redisCache = _redisConfiguration.GetDatabase();
         }
 
@@ -45,7 +45,7 @@ namespace CachingLibrary.Implementations.Services.Caching.Redis
 
             //var redisResultKeys = _redisCache.Execute("KEYS", "*");  
 
-            var redisResultKeys= _redisConfiguration.GetServer(_cachingOptions!.Redis!.ConnectionString).Keys().ToArray(); 
+            var redisResultKeys= _redisConfiguration.GetServer(_cachingOptions!.RedisCache!.ConnectionString!).Keys().ToArray(); 
             var patternMatchedKeys=redisResultKeys.Where(r => ((string)r).Contains(pattern)).ToArray();
             long countOfRemovedKeys = _redisCache.KeyDelete(patternMatchedKeys);
             return countOfRemovedKeys==patternMatchedKeys.Count();

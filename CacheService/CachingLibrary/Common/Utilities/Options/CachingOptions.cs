@@ -1,11 +1,12 @@
 ﻿namespace CachingLibrary.Common.Utilities.Options
 {
-    public sealed class CachingOptions
+    public  class CachingOptions
     {
-        public RedisCacheOption? Redis { get; set; }
+        public RedisCache? RedisCache { get; set; }
     }
 
-    public sealed  class RedisCacheOption{
-        public string ConnectionString { get; set; } = null!;
+    public class RedisCache
+    {
+        public string? ConnectionString { get; set; } 
     }
 }
