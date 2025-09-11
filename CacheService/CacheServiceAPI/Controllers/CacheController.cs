@@ -1,10 +1,6 @@
 ﻿using CachingLibrary.Common.Abstractions.Dtos.GetProducts;
 using CachingLibrary.Common.Abstractions.Interfaces.Services.Caching;
-using CachingLibrary.Common.Abstractions.Interfaces.Services.Caching.InMemory;
-using CachingLibrary.Common.Abstractions.Interfaces.Services.Caching.Redis;
 using CachingLibrary.Common.Utilities.Attributes;
-using CachingLibrary.Implementations.Services.Caching.InMemory;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CacheServiceApi.Controllers
@@ -24,9 +20,7 @@ namespace CacheServiceApi.Controllers
         };
 
 
-        public ICacheService   _cacheService { get; set; }
-        public IInMemoryCacheService   _inMemorycacheService { get; set; }
-
+        public ICacheService _cacheService { get; set; }
         public CacheController(ICacheService cacheService)
         {
             _cacheService = cacheService;
@@ -36,7 +30,7 @@ namespace CacheServiceApi.Controllers
 
         //public CacheController(IInMemoryCacheService inMemorycacheService)
         //{
-        //    _inMemorycacheService = inMemorycacheService;
+        //    _inMemoryCacheService = inMemorycacheService;
         //}
 
         //[HttpGet("GetKeys")]
@@ -60,6 +54,24 @@ namespace CacheServiceApi.Controllers
             Console.WriteLine("Some get service logic here......");
             return [.. Products.Where(p=>p.StartsWith(request.name)).Take(request.count)];
         }
+
+
+        //[HttpGet("GetProducts/{name}/{count}")]
+        //[Cache]
+        //public List<string> GetProducts(string surname, int count)
+        //{
+        //    Console.WriteLine("Some get service logic here......");
+        //    return [.. Products.Where(p=>p.StartsWith(surname)).Take(count)];
+        //}
+
+
+        //[HttpGet("GetProducts1")]
+        //[Cache]
+        //public List<string> GetProducts([FromQuery]GetProductsReqDto request,string synam, int age)
+        //{
+        //    Console.WriteLine("Some get service logic here......");
+        //    return [.. Products.Where(p=>p.StartsWith(synam)).Take(age)];
+        //}
 
 
         [HttpDelete("DeleteSummary")]
