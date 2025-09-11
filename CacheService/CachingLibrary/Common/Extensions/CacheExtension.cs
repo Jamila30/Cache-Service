@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Reflection;
 using System.Text;
 
 namespace CachingLibrary.Common.Extensions
@@ -20,26 +21,42 @@ namespace CachingLibrary.Common.Extensions
         }
         public static string GenerateCachingKey(this ActionExecutingContext context)
         {
-            var action = ((dynamic)context.HttpContext.Request).RouteValues["action"];
-            var controller = ((dynamic)context.HttpContext.Request).RouteValues["controller"] + "Controller";
-            var functKey = new StringBuilder();
-            var valuesData = string.Empty;
-            var arguments = context.ActionArguments.Values;
-            foreach (var item in arguments)
+            dynamic action = ((dynamic)context.HttpContext.Request).RouteValues["action"];
+            dynamic controller = ((dynamic)context.HttpContext.Request).RouteValues["controller"] + "Controller";
+            StringBuilder functKey = new StringBuilder();
+            string? valuesData = string.Empty;
+            IDictionary<string, object> arguments = context.ActionArguments;
+
+            List<string> generatedKeyValues = arguments.Select(kvp =>
             {
-                bool isCustom = item?.GetType().Namespace != "System";
-                if (isCustom && item is not null)
-                {
-                    var dtoType = item.GetType();
-                    var properties = dtoType.GetProperties();
-                    valuesData = string.Join(',', properties.Select(c => c.GetValue(item)));
-                }
-                else
-                {
-                    valuesData = item?.ToString();
-                }
-                functKey.Append(valuesData + ",");
-            }
+                string key = kvp.Key;
+                var value = kvp.Value;
+
+                return value != null && value.GetType().Namespace != "System"
+                    ? string.Join(',', value.GetType().GetProperties().Select(p => $"{p.Name}={p.GetValue(value)}"))
+                    : $"{key}={value}";
+            }).ToList();
+
+            functKey.Append(string.Join(",", generatedKeyValues));
+
+            #region Old version of funktKey generation 
+                  //foreach (var item in arguments.Values)
+                  //{
+                  //    bool isCustom = item?.GetType().Namespace != "System";
+                  //    if (isCustom && item is not null)
+                  //    {
+                  //        Type dtoType = item.GetType();
+                  //        PropertyInfo[] properties = dtoType.GetProperties();
+                  //        valuesData = string.Join(',', properties.Select(c => $"{c.Name}={c.GetValue(item)}"));
+                  //    }
+                  //    else
+                  //    {
+                  //        valuesData = item?.ToString();
+                  //    }
+                  //    functKey.Append(valuesData + ",");
+                  //}
+            #endregion
+
             var namespaceOfAction = context.Controller.GetType().Namespace;
             return $"{namespaceOfAction}.{controller}.{action}({functKey.ToString().Trim(',')})";
         }
